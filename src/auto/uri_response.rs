@@ -27,11 +27,11 @@ pub trait URIResponseExt: 'static {
     #[doc(alias = "get_content_length")]
     fn content_length(&self) -> u64;
 
-    //#[cfg(any(feature = "v2_6", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
-    //#[doc(alias = "webkit_uri_response_get_http_headers")]
-    //#[doc(alias = "get_http_headers")]
-    //fn http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders>;
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+    #[doc(alias = "webkit_uri_response_get_http_headers")]
+    #[doc(alias = "get_http_headers")]
+    fn http_headers(&self) -> Option<soup::MessageHeaders>;
 
     #[doc(alias = "webkit_uri_response_get_mime_type")]
     #[doc(alias = "get_mime_type")]
@@ -77,11 +77,13 @@ impl<O: IsA<URIResponse>> URIResponseExt for O {
         }
     }
 
-    //#[cfg(any(feature = "v2_6", feature = "dox"))]
-    //#[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
-    //fn http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders> {
-    //    unsafe { TODO: call ffi:webkit_uri_response_get_http_headers() }
-    //}
+    #[cfg(any(feature = "v2_6", feature = "dox"))]
+    #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_6")))]
+    fn http_headers(&self) -> Option<soup::MessageHeaders> {
+        unsafe {
+            from_glib_none(ffi::webkit_uri_response_get_http_headers(self.as_ref().to_glib_none().0))
+        }
+    }
 
     fn mime_type(&self) -> Option<glib::GString> {
         unsafe {

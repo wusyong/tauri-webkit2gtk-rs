@@ -79,9 +79,9 @@ if let Some(ref uri) = self.uri {
 pub const NONE_URI_REQUEST: Option<&URIRequest> = None;
 
 pub trait URIRequestExt: 'static {
-    //#[doc(alias = "webkit_uri_request_get_http_headers")]
-    //#[doc(alias = "get_http_headers")]
-    //fn http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders>;
+    #[doc(alias = "webkit_uri_request_get_http_headers")]
+    #[doc(alias = "get_http_headers")]
+    fn http_headers(&self) -> Option<soup::MessageHeaders>;
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
@@ -101,9 +101,11 @@ pub trait URIRequestExt: 'static {
 }
 
 impl<O: IsA<URIRequest>> URIRequestExt for O {
-    //fn http_headers(&self) -> /*Ignored*/Option<soup::MessageHeaders> {
-    //    unsafe { TODO: call ffi:webkit_uri_request_get_http_headers() }
-    //}
+    fn http_headers(&self) -> Option<soup::MessageHeaders> {
+        unsafe {
+            from_glib_none(ffi::webkit_uri_request_get_http_headers(self.as_ref().to_glib_none().0))
+        }
+    }
 
     #[cfg(any(feature = "v2_12", feature = "dox"))]
     #[cfg_attr(feature = "dox", doc(cfg(feature = "v2_12")))]
